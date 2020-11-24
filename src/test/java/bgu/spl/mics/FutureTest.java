@@ -29,4 +29,21 @@ public class FutureTest {
         assertTrue(future.isDone());
         assertTrue(str.equals(future.get()));
     }
+
+    @Test
+    void get() {
+
+    }
+
+    @Test
+    void isDone() {
+    }
+
+    @Test
+    void testGet() {
+    }
+
+    @AfterEach
+    void tearDown() {
+    }
 }

@@ -1,4 +1,3 @@
-//test massage
 package bgu.spl.mics;
 
 /**
