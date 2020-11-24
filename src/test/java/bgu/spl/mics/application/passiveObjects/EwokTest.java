@@ -18,9 +18,17 @@ class EwokTest {
 
     @Test
     void acquire() {
+        Ewok e = new Ewok(123);
+        e.acquire();
+        assertFalse(e.available);
     }
 
     @Test
     void release() {
+        Ewok e = new Ewok(123);
+        e.acquire();
+        assertFalse(e.available);
+        e.release();
+        assertTrue(e.available);
     }
 }

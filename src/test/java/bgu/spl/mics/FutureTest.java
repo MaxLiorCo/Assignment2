@@ -22,6 +22,10 @@ public class FutureTest {
         future = new Future<>();
     }
 
+    @AfterEach
+    void tearDown() {
+    }
+
     @Test
     public void testResolve(){
         String str = "someResult";
@@ -33,6 +37,7 @@ public class FutureTest {
     @Test
     void get() {
 
+
     }
 
     @Test
@@ -43,7 +48,9 @@ public class FutureTest {
     void testGet() {
     }
 
-    @AfterEach
-    void tearDown() {
+    @Test
+    void get(long timeout, TimeUnit unit){
+
     }
+
 }

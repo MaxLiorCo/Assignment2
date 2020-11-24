@@ -10,18 +10,22 @@ public class Ewok {
 	int serialNumber;
 	boolean available;
 	
-  
+  public Ewok(int serialNumber){
+      this.serialNumber = serialNumber;
+      available = true; // default value
+  }
+
     /**
      * Acquires an Ewok
      */
     public void acquire() {
-		
+		available = false;
     }
 
     /**
      * release an Ewok
      */
     public void release() {
-    	
+    	available = true;
     }
 }
