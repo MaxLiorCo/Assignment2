@@ -25,7 +25,7 @@ public class FutureTest {
     }
 
     @Test
-    public void testResolve(){
+    public void resolve(){
         String str = "someResult";
         future.resolve(str);
         assertTrue(future.isDone());
@@ -33,20 +33,22 @@ public class FutureTest {
     }
 
     @Test
-    void get() {
+    void get() { //checks both get functions
+        long timeout =1000;
+        TimeUnit unit = TimeUnit.MILLISECONDS;
+        assertNull(future.get(timeout, unit));
+        String str = "someResult";
+        future.resolve(str);
+        assertTrue(str.equals(future.get(timeout, unit)));
+        assertTrue(str.equals(future.get()));
     }
 
     @Test
     void isDone() {
-    }
-
-    @Test
-    void testGet() {
-    }
-
-    @Test
-    void get(long timeout, TimeUnit unit){
-
+        assertFalse(future.isDone());
+        String str = "someResult";
+        future.resolve(str);
+        assertTrue(str.equals(future.get()));
     }
 
 }
