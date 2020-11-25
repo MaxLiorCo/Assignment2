@@ -18,6 +18,7 @@ class MessageBusImplTest {
 
     @Test
     void subscribeEvent() {
+
     }
 
     @Test

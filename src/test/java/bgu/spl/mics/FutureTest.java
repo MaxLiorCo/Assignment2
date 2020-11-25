@@ -18,9 +18,7 @@ public class FutureTest {
     private Future<String> future;
 
     @BeforeEach
-    public void setUp(){
-        future = new Future<>();
-    }
+    public void setUp(){ future = new Future<>(); }
 
     @AfterEach
     void tearDown() {
@@ -36,8 +34,6 @@ public class FutureTest {
 
     @Test
     void get() {
-
-
     }
 
     @Test
