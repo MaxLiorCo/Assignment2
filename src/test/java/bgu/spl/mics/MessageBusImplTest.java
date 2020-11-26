@@ -2,6 +2,7 @@ package bgu.spl.mics;
 
 import bgu.spl.mics.application.messages.AttackEvent;
 import bgu.spl.mics.application.services.C3POMicroservice;
+import bgu.spl.mics.application.services.HanSoloMicroservice;
 import bgu.spl.mics.application.services.LeiaMicroservice;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,10 +23,15 @@ class MessageBusImplTest {
 
     @Test
     void subscribeEvent() {
-        C3POMicroservice m = new C3POMicroservice();
+        C3POMicroservice ms1 = new C3POMicroservice();
+        HanSoloMicroservice ms2 = new HanSoloMicroservice();
         MessageBusImpl bus = MessageBusImpl.getBusInstance();
-        bus.register(m);
-       // bus.subscribeEvent(AttackEvent,m);
+        bus.register(ms1);
+        bus.register(ms2);
+        bus.subscribeEvent(AttackEvent.class,ms1);
+        bus.subscribeEvent(AttackEvent.class,ms2);
+        Future<Boolean> f1 = bus.sendEvent(new AttackEvent());
+
     }
 
     @Test
