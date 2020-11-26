@@ -16,14 +16,27 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FutureTest {
 
     private Future<String> future;
+    Future<Boolean> future2;
 
     @BeforeEach
-    public void setUp(){ future = new Future<>(); }
+    public void setUp(){
+        future = new Future<>();
+
+        future2 = new Future<Boolean>();
+    }
 
     @AfterEach
     void tearDown() {
     }
 
+    /**
+     * @pre:
+     *     isDone = false
+     *     result = null
+     * @post:
+     *     isDone = true
+     *     result != null
+     */
     @Test
     public void resolve(){
         String str = "someResult";
@@ -32,8 +45,10 @@ public class FutureTest {
         assertTrue(str.equals(future.get()));
     }
 
+
     @Test
     void get() { //checks both get functions
+        future.get();
         long timeout =1000;
         TimeUnit unit = TimeUnit.MILLISECONDS;
         assertNull(future.get(timeout, unit));

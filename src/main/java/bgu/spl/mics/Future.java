@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 public class Future<T> {
 	private boolean isDone;
     private T result;
-	
 	/**
 	 * This should be the the only public constructor in this class.
 	 */
@@ -29,7 +28,8 @@ public class Future<T> {
      * not been completed.
      * <p>
      * @return return the result of type T if it is available, if not wait until it is available.
-     * 	       
+     *
+	 *
      */
 	public T get() {
 		if(isDone)
@@ -37,7 +37,7 @@ public class Future<T> {
 		else
 			while(!isDone){
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(30); //hinders performance time
 				}
 				catch (InterruptedException e){}
 			}
