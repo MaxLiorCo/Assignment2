@@ -4,7 +4,7 @@ package bgu.spl.mics.application.passiveObjects;
 import bgu.spl.mics.MessageBusImpl;
 import bgu.spl.mics.application.Main;
 
-import java.util.concurrent.atomic.AtomicReferenceArray;
+import java.util.ArrayList;
 
 /**
  * Passive object representing the resource manager.
@@ -19,19 +19,18 @@ public class Ewoks {
     /**
      * ewoks at index zero will be garbage, DO NOT ACCESS IT
      */
-    private static <Ewok> ewoks
+    private static ArrayList<Ewok> ewoks;
 
     private static class SingletonHolder{
-        private static final Ewoks ewoksInstance = new Ewoks;
+        private static ArrayList<Ewok> ewoksInstance = new ArrayList<Ewok>();
     }
 
-    private Ewoks(){
-        ewoks = new AtomicReferenceArray<Ewok>(ewokNum + 1);
-        for (int i=1; i<ewokNum; i++)
-            ewoks.set(i,new Ewok(i));
+    private Ewoks() {
+        ewoks = new ArrayList<Ewok>();
     }
 
-    public static Ewoks getInstance(){
+    public static ArrayList<Ewok> getInstance() {
         return SingletonHolder.ewoksInstance;
     }
-]
+
+}

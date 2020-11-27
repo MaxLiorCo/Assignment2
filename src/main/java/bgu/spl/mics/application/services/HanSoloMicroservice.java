@@ -22,6 +22,12 @@ public class HanSoloMicroservice extends MicroService {
     @Override
     protected void initialize() {
 
-        subscribeEvent(AttackEvent.class, (c) -> System.out.println("choose the c parameter, take ewoke and sleep")); //TODO
+        subscribeEvent(AttackEvent.class,
+                (AttackEvent c) -> {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                    }
+                });
     }
 }
