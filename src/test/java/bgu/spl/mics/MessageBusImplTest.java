@@ -2,6 +2,7 @@ package bgu.spl.mics;
 
 import bgu.spl.mics.application.messages.AttackEvent;
 import bgu.spl.mics.application.messages.TerminateBroadcast;
+import bgu.spl.mics.application.passiveObjects.Attack;
 import bgu.spl.mics.application.passiveObjects.DummyBroadcast;
 import bgu.spl.mics.application.services.C3POMicroservice;
 import bgu.spl.mics.application.services.HanSoloMicroservice;
@@ -10,6 +11,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -85,7 +88,7 @@ class MessageBusImplTest {
 
     @Test
     void sendEvent() {
-        AttackEvent e1 = new AttackEvent();
+        AttackEvent e1 = new AttackEvent(new Attack(new ArrayList<Integer>(),10));
         C3POMicroservice ms1 = new C3POMicroservice();
         HanSoloMicroservice ms2 = new HanSoloMicroservice();
         bus.register(ms1);
@@ -117,8 +120,10 @@ class MessageBusImplTest {
     void awaitMessage() {
         C3POMicroservice ms = new C3POMicroservice();
         bus.register(ms);
-        ms.subscribeEvent(new AttackEvent().getClass(), (c) -> {});
-        Future<Boolean> f1 = bus.sendEvent(new AttackEvent());
+        Attack a = new Attack(new ArrayList<>(), 10);
+        AttackEvent aE = new AttackEvent(a);
+        ms.subscribeEvent(aE.getClass(), (c) -> {});
+        Future<Boolean> f1 = bus.sendEvent(aE);
         try{
             Thread.sleep(2000);
         }
