@@ -22,9 +22,9 @@ import java.util.Map;
  */
 public abstract class MicroService implements Runnable { 
     
-    protected Map<Class<? extends Message> , Callback> messageAct;
-    protected MessageBusImpl bus;
-    protected String name;
+    private Map<Class<? extends Message> , Callback> messageAct;
+    private MessageBusImpl bus;
+    private String name;
     /**
      * @param name the micro-service name (used mainly for debugging purposes -
      *             does not have to be unique)
@@ -81,7 +81,7 @@ public abstract class MicroService implements Runnable {
      *                 queue.
      */
     protected final <B extends Broadcast> void subscribeBroadcast(Class<B> type, Callback<B> callback) {
-    	
+
     }
 
     /**
@@ -160,9 +160,7 @@ public abstract class MicroService implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
         }
     	bus.unregister(this);
     }
-
 }

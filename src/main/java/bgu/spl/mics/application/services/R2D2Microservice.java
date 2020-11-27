@@ -18,6 +18,5 @@ public class R2D2Microservice extends MicroService {
 
     @Override
     protected void initialize() {
-
     }
 }

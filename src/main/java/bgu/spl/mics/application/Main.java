@@ -23,7 +23,6 @@ public class Main {
             gson = new Gson();
             map = gson.fromJson(jfile, Map.class);
 
-
             // print map entries
             for (Map.Entry<?, ?> entry : map.entrySet()) {
                 System.out.println(entry.getKey() + "=" + entry.getValue());

@@ -15,7 +15,7 @@ public class MessageBusImpl implements MessageBus {
 	private ConcurrentHashMap<String, ConcurrentLinkedQueue<Message>> map;
 
 	private static class SingletonHolder{
-		private static MessageBusImpl busInstance = new MessageBusImpl();
+		private static final MessageBusImpl busInstance = new MessageBusImpl();
 	}
 
 	private MessageBusImpl(){

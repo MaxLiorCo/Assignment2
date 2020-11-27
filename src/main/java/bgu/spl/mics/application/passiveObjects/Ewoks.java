@@ -19,10 +19,10 @@ public class Ewoks {
     /**
      * ewoks at index zero will be garbage, DO NOT ACCESS IT
      */
-    private static <Ewok> ewoks;
+    private static <Ewok> ewoks
 
     private static class SingletonHolder{
-        private static Ewoks ewoksInstance = new Ewoks;
+        private static final Ewoks ewoksInstance = new Ewoks;
     }
 
     private Ewoks(){
