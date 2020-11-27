@@ -91,5 +91,6 @@ public class Main {
         }
         catch (InterruptedException e){}
         //create diary here
+
     }
 }

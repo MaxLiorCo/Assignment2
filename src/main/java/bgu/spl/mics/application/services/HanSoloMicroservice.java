@@ -1,8 +1,15 @@
 package bgu.spl.mics.application.services;
 
 
+import bgu.spl.mics.MessageBusImpl;
 import bgu.spl.mics.MicroService;
 import bgu.spl.mics.application.messages.AttackEvent;
+import bgu.spl.mics.application.passiveObjects.Ewok;
+import bgu.spl.mics.application.passiveObjects.Ewoks;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * HanSoloMicroservices is in charge of the handling {@link AttackEvent}.
@@ -23,11 +30,20 @@ public class HanSoloMicroservice extends MicroService {
     protected void initialize() {
 
         subscribeEvent(AttackEvent.class,
-                (AttackEvent c) -> {
+                (AttackEvent att) -> {
+                    ArrayList<Ewok> ewoks = Ewoks.getInstance();
+                    List<Integer> serials = att.getSerials();
+                    for(Integer i : serials) {
+                        if(ewoks.get(i).isAvailable()) {
+                            //TODO
+                        }
+                    }
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(att.getDuration());
                     } catch (InterruptedException e) {
                     }
+                    MessageBusImpl bus = MessageBusImpl.getBusInstance();
+                    bus.complete(att, true); // finished attack
                 });
     }
 }
