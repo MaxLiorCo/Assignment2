@@ -7,6 +7,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EwokTest {
+    /**
+     * @inv:
+     *      e.serialNumber>0
+     */
     Ewok e;
 
     @BeforeEach
