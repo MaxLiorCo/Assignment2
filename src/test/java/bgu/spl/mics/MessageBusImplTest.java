@@ -15,9 +15,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MessageBusImplTest {
 
+    MessageBusImpl bus;
 
     @BeforeEach
     void setUp() {
+        bus = MessageBusImpl.getBusInstance();
     }
 
     @AfterEach
@@ -42,6 +44,7 @@ class MessageBusImplTest {
 
     @Test
     void complete() {
+        //no need to test
     }
 
     /**
@@ -58,7 +61,6 @@ class MessageBusImplTest {
         C3POMicroservice ms1 = new C3POMicroservice();
         HanSoloMicroservice ms2 = new HanSoloMicroservice();
         LandoMicroservice ms3 = new LandoMicroservice(0);
-        MessageBusImpl bus = MessageBusImpl.getBusInstance();
         bus.register(ms1);
         bus.register(ms2);
         bus.register(ms3);
@@ -86,7 +88,6 @@ class MessageBusImplTest {
         AttackEvent e1 = new AttackEvent();
         C3POMicroservice ms1 = new C3POMicroservice();
         HanSoloMicroservice ms2 = new HanSoloMicroservice();
-        MessageBusImpl bus = MessageBusImpl.getBusInstance();
         bus.register(ms1);
         bus.register(ms2);
         ms2.subscribeEvent(e1.getClass(), (c) -> {});
@@ -115,7 +116,6 @@ class MessageBusImplTest {
     @Test
     void awaitMessage() {
         C3POMicroservice ms = new C3POMicroservice();
-        MessageBusImpl bus = MessageBusImpl.getBusInstance();
         bus.register(ms);
         ms.subscribeEvent(new AttackEvent().getClass(), (c) -> {});
         Future<Boolean> f1 = bus.sendEvent(new AttackEvent());
