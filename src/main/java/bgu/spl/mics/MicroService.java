@@ -151,14 +151,14 @@ public abstract class MicroService implements Runnable {
      */
     @Override
     public final void run() {
-        Message m;
+        Message message;
         bus.register(this);
         initialize(); //we run in the derived object
         while(name.equals("pishioto")){//TODO change this!!!!
             try {
-                m = bus.awaitMessage(this);
-                Callback c = messageAct.get(m.getClass());
-                c.call(m);
+                message = bus.awaitMessage(this);
+                Callback c = messageAct.get(message.getClass());
+                c.call(message);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

@@ -49,7 +49,7 @@ public class MessageBusImpl implements MessageBus {
 
 	@Override @SuppressWarnings("unchecked")
 	public <T> void complete(Event<T> e, T result) {
-		
+		//TODO complete this
 	}
 
 	@Override
@@ -70,7 +70,8 @@ public class MessageBusImpl implements MessageBus {
 			throw new IllegalArgumentException("Such event do not exist in the current messageTypeMap");
 		MicroService toAdd = wrap.getCurrMicroService();
 		microServiceMap.get(toAdd).add(e);
-		return e.;
+		/*return e.;*/ //TODO must change this!! figure out how to return a FUTURE OBJECT
+		return null;
 	}
 
 	@Override
@@ -86,14 +87,20 @@ public class MessageBusImpl implements MessageBus {
 	 */
 	@Override
 	public void unregister(MicroService m) {
-		microServiceMap.remove(m);
-		messageTypeMap.forEach((messageType, messageWrap) -> messageWrap.removeMS(m));
+		microServiceMap.remove(m); // removes the queue of this MS in message-bus
+		messageTypeMap.forEach((messageType, messageWrap) -> messageWrap.removeMS(m)); // remove each message type this MS subscribed to
 	}
 
 	@Override
 	public Message awaitMessage(MicroService m) throws InterruptedException {
-		
-		return null;
+		Queue<Message> tempQueue = microServiceMap.get(m);
+ 		while (tempQueue.isEmpty()) {
+			try {
+				Thread.sleep(3);
+			}
+			catch (InterruptedException e) { }
+		}
+		return microServiceMap.get(m).remove();
 	}
 
 	/**
