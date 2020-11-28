@@ -58,7 +58,6 @@ public abstract class MicroService implements Runnable {
      *                 queue.
      */
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) {
-    	// WE add type and callback to messageAct
         bus.subscribeEvent(type, this);
         messageAct.put(type, callback);
     }
