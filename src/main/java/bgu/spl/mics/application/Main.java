@@ -11,6 +11,7 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -51,6 +52,7 @@ public class Main {
             for(Double d : temp){
                 serials.add(d.intValue());
             }
+            Collections.sort(serials); //order the serials to prevent dead lock
             Attack a = new Attack(serials, duration);
             attacks[i] = a;
             i++;
