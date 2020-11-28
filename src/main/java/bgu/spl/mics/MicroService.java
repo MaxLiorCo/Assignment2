@@ -1,5 +1,6 @@
 package bgu.spl.mics;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -31,6 +32,7 @@ public abstract class MicroService implements Runnable {
      *             does not have to be unique)
      */
     public MicroService(String name) {
+        messageAct = new HashMap<>();
         this.name = name;
         bus = MessageBusImpl.getBusInstance();
         terminate = false; // this will be changed to 'true' when TerminateEvent will be sent
@@ -154,6 +156,7 @@ public abstract class MicroService implements Runnable {
      */
     @Override
     public final void run() {
+        System.out.println(name + " thread " + Thread.currentThread());
         Message message;
         bus.register(this);
         initialize(); //we run in the derived object

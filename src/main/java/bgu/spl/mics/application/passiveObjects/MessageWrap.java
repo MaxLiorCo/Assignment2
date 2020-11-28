@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MessageWrap implements Message {
-    private static int roundRobinCounter;
+    private int roundRobinCounter;
     private Class<? extends Message> messageType;
     private List<MicroService> subscribedMS; // this list contains the subscribed MS for this type
 

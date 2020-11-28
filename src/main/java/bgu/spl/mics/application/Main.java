@@ -33,8 +33,6 @@ public class Main {
             for (Map.Entry<?, ?> entry : map.entrySet()) {
                 System.out.println(entry.getKey() + "=" + entry.getValue());
             }
-            System.out.println(map.get("attacks"));
-            System.out.println(map.get("attacks").getClass());
             // close reader
             jfile.close();
         }
@@ -65,7 +63,7 @@ public class Main {
         for (i=1; i<=ewoksNum ; i++)
             ewoks.add(i, new Ewok(i));
 
-        LeiaMicroservice leia = new LeiaMicroservice(attacks);
+        LeiaMicroservice leia = new LeiaMicroservice(attacks, 5);  //Leia must receive num of total Mic-Services
         HanSoloMicroservice hanSolo = new HanSoloMicroservice();
         C3POMicroservice c3po = new C3POMicroservice();
         R2D2Microservice r2d2 = new R2D2Microservice(r2d2Time);
@@ -82,7 +80,6 @@ public class Main {
         tC3po.start();
         tR2d2.start();
         tLando.start();
-
 
         try {
             tLeia.join();
@@ -112,6 +109,5 @@ public class Main {
 
         }
         catch (IOException e) {}
-
     }
 }
