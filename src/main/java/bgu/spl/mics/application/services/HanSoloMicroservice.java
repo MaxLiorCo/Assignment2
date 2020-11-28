@@ -4,6 +4,7 @@ package bgu.spl.mics.application.services;
 import bgu.spl.mics.MessageBusImpl;
 import bgu.spl.mics.MicroService;
 import bgu.spl.mics.application.messages.AttackEvent;
+import bgu.spl.mics.application.messages.FinishedAttacksBroadcast;
 import bgu.spl.mics.application.messages.TerminateBroadcast;
 import bgu.spl.mics.application.passiveObjects.Diary;
 import bgu.spl.mics.application.passiveObjects.Ewok;
@@ -60,5 +61,8 @@ public class HanSoloMicroservice extends MicroService {
                     terminate();
                     Diary.setHanSoloTerminate(System.currentTimeMillis());
                 });
+
+        //-----subscribe to FinishedAttacksBroadcast
+        subscribeBroadcast(FinishedAttacksBroadcast.class, (finishedAttacks) -> Diary.setHanSoloFinish(System.currentTimeMillis()));
     }
 }

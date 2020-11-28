@@ -1,19 +1,19 @@
 package bgu.spl.mics.application;
 
 import bgu.spl.mics.application.passiveObjects.Attack;
+import bgu.spl.mics.application.passiveObjects.Diary;
 import bgu.spl.mics.application.passiveObjects.Ewok;
 import bgu.spl.mics.application.passiveObjects.Ewoks;
 import bgu.spl.mics.application.services.*;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /** This is the Main class of the application. You should parse the input file,
  * create the different components of the application, and run the system.
@@ -92,7 +92,21 @@ public class Main {
             tLando.join();
         }
         catch (InterruptedException e){}
-        //create diary here
 
+        Gson output = new Gson();
+        Map<String, Object> outputMap = new HashMap<>();
+        outputMap.put("Total attacks", Diary.getTotalAttacks());
+        outputMap.put("HanSoloFinish", Diary.getHanSoloFinish());
+        outputMap.put("C3POFinish", Diary.getC3POFinish());
+        outputMap.put("R2D2Deactivate", Diary.getR2D2Deactivate());
+        outputMap.put("LeiaTerminate", Diary.getLeiaTerminate());
+        outputMap.put("HanSoloTerminate", Diary.getHanSoloTerminate());
+        outputMap.put("C3POTerminate", Diary.getC3POTerminate());
+        outputMap.put("R2D2Terminate", Diary.getR2D2Terminate());
+        outputMap.put("LandoTerminate", Diary.getLandoTerminate());
+        try{
+            output.toJson(outputMap, new FileWriter("src/main/java/bgu/spl/mics/application/output.json"));
+        }
+        catch (IOException e) {}
     }
 }

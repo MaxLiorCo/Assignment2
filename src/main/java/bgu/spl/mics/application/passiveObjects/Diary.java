@@ -64,8 +64,8 @@ public class Diary {
 
     //----Getters
 
-    public static AtomicInteger getTotalAttacks() {
-        return totalAttacks;
+    public static int getTotalAttacks() {
+        return totalAttacks.intValue();
     }
 
     public static long getHanSoloFinish() {
