@@ -15,7 +15,7 @@ public class MessageBusImpl implements MessageBus {
 
 	private Map<MicroService, Queue<Message>> microServiceMap;
 	private Map<Class<? extends Message>, MessageWrap> messageTypeMap;
-	private Map<Event, Future> eventToFutureMap;
+	private Map<Event<?>, Future<?>> eventToFutureMap;
 
 	private static class SingletonHolder{
 		private static final MessageBusImpl busInstance = new MessageBusImpl();
