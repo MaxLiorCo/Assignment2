@@ -25,19 +25,22 @@ public class LeiaMicroservice extends MicroService {
 	private Map<Event<Boolean>, Future<Boolean>> attackMap;
 	private int totalMicroServices;
 	private int numOfReadyMicroServices;
+	private Thread mainThreat;
 	
-    public LeiaMicroservice(Attack[] attacks, int totalMicroServices) {
+    public LeiaMicroservice(Attack[] attacks, int totalMicroServices, Thread mainThread) {
         super("Leia");
 		this.attacks = attacks;
 		this.totalMicroServices = totalMicroServices;
         numOfReadyMicroServices = 0;
 		attackMap = new HashMap<>();
+		this.mainThreat = mainThread;
     }
 
     @Override
     protected void initialize() {
         subscribeBroadcast(IsReadyBroadcast.class , (IsReadyBroadcast rdy) -> act() );
         numOfReadyMicroServices++; //Leia is ready
+        mainThreat.interrupt();
     }
 
     private void act(){
