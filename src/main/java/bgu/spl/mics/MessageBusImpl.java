@@ -15,6 +15,7 @@ public class MessageBusImpl implements MessageBus {
 
 	private Map<MicroService, Queue<Message>> microServiceMap;
 	private Map<Class<? extends Message>, MessageWrap> messageTypeMap;
+	private Map<Event, Future> eventToFutureMap;
 
 	private static class SingletonHolder{
 		private static final MessageBusImpl busInstance = new MessageBusImpl();
@@ -27,6 +28,7 @@ public class MessageBusImpl implements MessageBus {
 	private MessageBusImpl(){
 		microServiceMap = new HashMap<>();
 		messageTypeMap = new HashMap<>();
+		eventToFutureMap = new HashMap<>();
 	}
 
 
@@ -49,7 +51,9 @@ public class MessageBusImpl implements MessageBus {
 
 	@Override @SuppressWarnings("unchecked")
 	public <T> void complete(Event<T> e, T result) {
-		//TODO complete this
+		Future futureToUpdate = eventToFutureMap.get(e);
+		futureToUpdate.resolve(result);
+		eventToFutureMap.remove(e);
 	}
 
 	@Override
@@ -58,7 +62,7 @@ public class MessageBusImpl implements MessageBus {
 		if (wrap == null)
 			throw new IllegalArgumentException("Such broadcast do not exist in the current messageTypeMap");
 		for (MicroService ms : wrap.getSubscribedMS()){ //Broadcast 'b' is sent to all subscribed MicroServices
-			microServiceMap.get(ms).add(b);
+			microServiceMap.get(ms).add(b); // adding broadcast b to ms's queue
 		}
 	}
 
@@ -68,10 +72,11 @@ public class MessageBusImpl implements MessageBus {
 		MessageWrap wrap = messageTypeMap.get(e.getClass());
 		if (wrap == null)
 			throw new IllegalArgumentException("Such event do not exist in the current messageTypeMap");
-		MicroService toAdd = wrap.getCurrMicroService();
-		microServiceMap.get(toAdd).add(e);
-		/*return e.;*/ //TODO must change this!! figure out how to return a FUTURE OBJECT
-		return null;
+		MicroService toAdd = wrap.getCurrMicroService(); // current MS in the round-robin manner
+		microServiceMap.get(toAdd).add(e); // adding event e to toAdd queue
+		Future<T> future = new Future<T>();
+		eventToFutureMap.put(e, future); // future will be eventually resolved in Complete function
+		return future;
 	}
 
 	@Override

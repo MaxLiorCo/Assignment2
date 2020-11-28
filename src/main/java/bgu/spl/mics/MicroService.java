@@ -22,9 +22,10 @@ import java.util.Map;
  */
 public abstract class MicroService implements Runnable { 
     
-    private Map<Class<? extends Message> , Callback> messageAct;
+    private Map<Class<? extends Message> , Callback> messageAct; // each message type is going to hold the callback function suitable for the type
     private MessageBusImpl bus;
     private String name;
+    private boolean terminate;
     /**
      * @param name the micro-service name (used mainly for debugging purposes -
      *             does not have to be unique)
@@ -32,6 +33,7 @@ public abstract class MicroService implements Runnable {
     public MicroService(String name) {
         this.name = name;
         bus = MessageBusImpl.getBusInstance();
+        terminate = false; // this will be changed to 'true' when TerminateEvent will be sent
     }
 
     /**
@@ -58,6 +60,7 @@ public abstract class MicroService implements Runnable {
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) {
     	// WE add type and callback to messageAct
         bus.subscribeEvent(type, this);
+        messageAct.put(type, callback);
     }
 
     /**
@@ -81,7 +84,8 @@ public abstract class MicroService implements Runnable {
      *                 queue.
      */
     protected final <B extends Broadcast> void subscribeBroadcast(Class<B> type, Callback<B> callback) {
-
+        bus.subscribeBroadcast(type, this);
+        messageAct.put(type, callback);
     }
 
     /**
@@ -134,7 +138,7 @@ public abstract class MicroService implements Runnable {
      * message.
      */
     protected final void terminate() {
-        //TODO
+        terminate = true;
     }
 
     /**
@@ -154,7 +158,7 @@ public abstract class MicroService implements Runnable {
         Message message;
         bus.register(this);
         initialize(); //we run in the derived object
-        while(name.equals("pishioto")){//TODO change this!!!!
+        while(!terminate){
             try {
                 message = bus.awaitMessage(this);
                 Callback c = messageAct.get(message.getClass());

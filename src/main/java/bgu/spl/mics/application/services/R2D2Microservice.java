@@ -12,11 +12,15 @@ import bgu.spl.mics.MicroService;
  */
 public class R2D2Microservice extends MicroService {
 
+    private long duration;
+
     public R2D2Microservice(long duration) {
         super("R2D2");
+        this.duration = duration;
     }
 
     @Override
     protected void initialize() {
+        sub
     }
 }
