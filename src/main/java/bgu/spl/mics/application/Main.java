@@ -20,7 +20,9 @@ import java.util.*;
  */
 public class Main {
     static Object lock = new Object();
+    static boolean finished = false;
     public static void main(String[] args){
+        finished = false;
         long time = System.currentTimeMillis();
         Reader jfile;
         Gson gson;
@@ -130,5 +132,6 @@ public class Main {
  /*       long dif = (Diary.getC3POFinish() - Diary.getR2D2Terminate())/1000;
 
         System.out.println("C3PO finished " + dif + "Seconds");*/
+        finished = true;
     }
 }

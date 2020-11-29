@@ -6,26 +6,26 @@ import bgu.spl.mics.MicroService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MessageWrap implements Message {
     private int roundRobinCounter;
     private Class<? extends Message> messageType;
-    private List<MicroService> subscribedMS; // this list contains the subscribed MS for this type
+   // private List<MicroService> subscribedMS; // this list contains the subscribed MS for this type
+    private CopyOnWriteArrayList<MicroService> subscribedMS;
 
     public MessageWrap(Class<? extends Message> messageType, int counterInit){
         this.messageType = messageType;
-        subscribedMS = new ArrayList<>();
         roundRobinCounter = counterInit;
+        subscribedMS = new CopyOnWriteArrayList<>();
     }
-    public void addMS(MicroService ms){
-        subscribedMS.add(ms);
-    }
+    public synchronized void addMS(MicroService ms){ subscribedMS.add(ms); }
 
-    public void removeMS(MicroService ms){
+    public synchronized void removeMS(MicroService ms){ //TODO
         subscribedMS.remove(ms);
     }
 
-    public List<MicroService> getSubscribedMS(){
+    public synchronized List<MicroService> getSubscribedMS(){
         return subscribedMS;
     }
 
@@ -34,4 +34,5 @@ public class MessageWrap implements Message {
         roundRobinCounter = (roundRobinCounter++) % subscribedMS.size();
         return subscribedMS.get(currMSIndex);
     }
+
 }

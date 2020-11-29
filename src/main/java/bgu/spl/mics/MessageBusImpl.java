@@ -4,7 +4,6 @@ package bgu.spl.mics;
 import bgu.spl.mics.application.passiveObjects.MessageWrap;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
 
@@ -63,8 +62,13 @@ public class MessageBusImpl implements MessageBus {
 		MessageWrap wrap = messageTypeMap.get(b.getClass());
 		if (wrap == null)
 			throw new IllegalArgumentException("Such broadcast do not exist in the current messageTypeMap");
-		for (MicroService ms : wrap.getSubscribedMS()){ //Broadcast 'b' is sent to all subscribed MicroServices
-			microServiceMap.get(ms).add(b); // adding broadcast b to ms's queue
+/*		for (MicroService ms : wrap.getSubscribedMS()){ //Broadcast 'b' is sent to all subscribed MicroServices
+			if (ms!=null)
+				microServiceMap.get(ms).add(b); // adding broadcast b to ms's queue
+		}*/
+		for (Iterator<MicroService> it = wrap.getSubscribedMS().iterator(); it.hasNext();){
+			MicroService tempMS = it.next();
+			microServiceMap.get(tempMS).add(b);
 		}
 	}
 
@@ -102,12 +106,6 @@ public class MessageBusImpl implements MessageBus {
 	public Message awaitMessage(MicroService m) throws InterruptedException {
 		LinkedBlockingQueue<Message> tempQueue = microServiceMap.get(m);
 		Message toReturn = tempQueue.take();
- 	/*	while (tempQueue.isEmpty()) {
-			try {
-				Thread.sleep(3);
-			}
-			catch (InterruptedException e) { }
-		}*/
 		return toReturn;
 	}
 
@@ -119,14 +117,15 @@ public class MessageBusImpl implements MessageBus {
 	 * @param counter
 	 */
 	private void subscribeMicroServiceToMessage(Class <? extends Message> type, MicroService m, int counter) {
-		MessageWrap wrap = messageTypeMap.get(type); // return value for type in the map, or null if does not exist
-		if (wrap == null){ // if no such entry in the map, we need to constructor one
-			wrap = new MessageWrap(type, counter);
-			messageTypeMap.put(type, wrap);
-			wrap.addMS(m);
-		}
-		else{ // such entry of type class exists in the map, thus we just add m to the list of this wrapper
-			wrap.addMS(m);
+		synchronized (type) {
+			MessageWrap wrap = messageTypeMap.get(type); // return value for type in the map, or null if does not exist
+			if (wrap == null) { // if no such entry in the map, we need to constructor one
+				wrap = new MessageWrap(type, counter);
+				messageTypeMap.put(type, wrap);
+				wrap.addMS(m);
+			} else { // such entry of type class exists in the map, thus we just add m to the list of this wrapper
+				wrap.addMS(m);
+			}
 		}
 	}
 }
