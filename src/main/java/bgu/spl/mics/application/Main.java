@@ -6,7 +6,6 @@ import bgu.spl.mics.application.passiveObjects.Ewok;
 import bgu.spl.mics.application.passiveObjects.Ewoks;
 import bgu.spl.mics.application.services.*;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,7 +19,9 @@ import java.util.*;
  * In the end, you should output a JSON.
  */
 public class Main {
+    static Object lock = new Object();
     public static void main(String[] args){
+        long time = System.currentTimeMillis();
         Reader jfile;
         Gson gson;
         Map<?, ?> map = null;
@@ -63,7 +64,8 @@ public class Main {
         for (i=1; i<=ewoksNum ; i++)
             ewoks.add(i, new Ewok(i));
 
-        LeiaMicroservice leia = new LeiaMicroservice(attacks, 5, Thread.currentThread());  //Leia must receive num of total Mic-Services
+
+        LeiaMicroservice leia = new LeiaMicroservice(attacks, 5, lock);  //Leia must receive num of total Mic-Services
         HanSoloMicroservice hanSolo = new HanSoloMicroservice();
         C3POMicroservice c3po = new C3POMicroservice();
         R2D2Microservice r2d2 = new R2D2Microservice(r2d2Time);
@@ -76,10 +78,19 @@ public class Main {
         Thread tLando = new Thread(lando);
 
         tLeia.start();
-        try{
-            Thread.sleep(2000);
+
+        synchronized (lock){
+            try {
+               // while(!cont)
+                     lock.wait();
+            }
+            catch (InterruptedException e) {}
         }
-        catch (InterruptedException e){}
+      /*  try{
+           //Thread.sleep(2000);
+            Thread.currentThread().wait();
+        }
+        catch (InterruptedException e){}*/
 
         tHanSolo.start();
         tC3po.start();
@@ -112,8 +123,12 @@ public class Main {
             output.toJson(outputMap, writer);
             writer.flush();
             writer.close();
-
         }
         catch (IOException e) {}
+
+        System.out.println((System.currentTimeMillis() - time)/1000.0);
+ /*       long dif = (Diary.getC3POFinish() - Diary.getR2D2Terminate())/1000;
+
+        System.out.println("C3PO finished " + dif + "Seconds");*/
     }
 }
