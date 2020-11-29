@@ -2,8 +2,7 @@ package bgu.spl.mics;
 
 import bgu.spl.mics.application.messages.AttackEvent;
 import bgu.spl.mics.application.messages.TerminateBroadcast;
-import bgu.spl.mics.application.passiveObjects.Attack;
-import bgu.spl.mics.application.passiveObjects.DummyBroadcast;
+import bgu.spl.mics.application.passiveObjects.*;
 import bgu.spl.mics.application.services.C3POMicroservice;
 import bgu.spl.mics.application.services.HanSoloMicroservice;
 import bgu.spl.mics.application.services.LandoMicroservice;
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -118,16 +118,27 @@ class MessageBusImplTest {
 
     @Test
     void awaitMessage() {
+        Message message;
         C3POMicroservice ms = new C3POMicroservice();
         bus.register(ms);
         Attack a = new Attack(new ArrayList<>(), 10);
         AttackEvent aE = new AttackEvent(a);
-        ms.subscribeEvent(aE.getClass(), (c) -> {});
+        ms.subscribeEvent(AttackEvent.class,
+                (AttackEvent att) -> {
+                    bus.complete(att, true); // finished attack
+                });
+
         Future<Boolean> f1 = bus.sendEvent(aE);
-        try{
-            Thread.sleep(2000);
+        try {
+            message = bus.awaitMessage(ms);
+            Callback c = ((att) -> {
+                bus.complete(aE, true); // finished attack
+            });
+
+            c.call(message);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        catch(InterruptedException e){ }
         assertTrue(f1.get());
     }
 }

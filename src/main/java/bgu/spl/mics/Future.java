@@ -37,7 +37,7 @@ public class Future<T> {
 		else
 			while(!isDone){
 				try {
-					Thread.sleep(30); //hinders performance time
+					Thread.sleep(10);
 				}
 				catch (InterruptedException e){}
 			}
