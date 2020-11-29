@@ -22,6 +22,7 @@ public class LandoMicroservice  extends MicroService {
 
     @Override
     protected void initialize() {
+
         //-----Subscribe to BombDestroyerEvent
         subscribeEvent(BombDestroyerEvent.class, (bombDestroyer) -> {
             try {
@@ -38,5 +39,6 @@ public class LandoMicroservice  extends MicroService {
         });
 
         sendBroadcast(new IsReadyBroadcast());
+
     }
 }

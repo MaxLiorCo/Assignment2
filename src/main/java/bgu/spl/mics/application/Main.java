@@ -76,12 +76,16 @@ public class Main {
         Thread tLando = new Thread(lando);
 
         tLeia.start();
-        try{ Thread.sleep(2000);}
-        catch (InterruptedException e){} //Waits for leia
+        try{
+            Thread.sleep(2000);
+        }
+        catch (InterruptedException e){}
+
         tHanSolo.start();
         tC3po.start();
         tR2d2.start();
         tLando.start();
+
 
         try {
             tLeia.join();

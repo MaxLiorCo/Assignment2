@@ -67,5 +67,6 @@ public class HanSoloMicroservice extends MicroService {
         subscribeBroadcast(FinishedAttacksBroadcast.class, (finishedAttacks) -> Diary.setHanSoloFinish(System.currentTimeMillis()));
 
         sendBroadcast(new IsReadyBroadcast());
+
     }
 }
