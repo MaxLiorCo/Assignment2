@@ -4,7 +4,7 @@
 
     {
 
-      "duration" : 1000,
+      "duration" : 2,
 
       "serials" : [1,2]
 
@@ -12,7 +12,7 @@
 
     {
 
-      "duration" : 1000,
+      "duration" : 2,
 
       "serials" : [2,1]
 
@@ -20,9 +20,9 @@
 
   ],
 
-  "R2D2": 2000,
+  "R2D2": 2,
 
-  "Lando": 2000,
+  "Lando": 2,
 
   "Ewoks": 2
 

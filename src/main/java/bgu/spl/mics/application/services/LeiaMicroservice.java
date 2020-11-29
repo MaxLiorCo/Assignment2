@@ -40,7 +40,8 @@ public class LeiaMicroservice extends MicroService {
     protected void initialize() {
         subscribeBroadcast(IsReadyBroadcast.class , (IsReadyBroadcast rdy) -> act() );
         numOfReadyMicroServices++; //Leia is ready
-        mainThreat.interrupt();
+       // mainThreat.interrupt();
+
     }
 
     private void act(){

@@ -63,7 +63,7 @@ public class Main {
         for (i=1; i<=ewoksNum ; i++)
             ewoks.add(i, new Ewok(i));
 
-        LeiaMicroservice leia = new LeiaMicroservice(attacks, 5);  //Leia must receive num of total Mic-Services
+        LeiaMicroservice leia = new LeiaMicroservice(attacks, 5, Thread.currentThread());  //Leia must receive num of total Mic-Services
         HanSoloMicroservice hanSolo = new HanSoloMicroservice();
         C3POMicroservice c3po = new C3POMicroservice();
         R2D2Microservice r2d2 = new R2D2Microservice(r2d2Time);
@@ -76,10 +76,16 @@ public class Main {
         Thread tLando = new Thread(lando);
 
         tLeia.start();
+        try{
+            Thread.sleep(2000);
+        }
+        catch (InterruptedException e){}
+
         tHanSolo.start();
         tC3po.start();
         tR2d2.start();
         tLando.start();
+
 
         try {
             tLeia.join();

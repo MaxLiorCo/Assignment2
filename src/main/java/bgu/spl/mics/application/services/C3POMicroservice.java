@@ -31,6 +31,7 @@ public class C3POMicroservice extends MicroService {
     @Override
     protected void initialize() {
 
+
         //---subscribe to AttackEvents
         subscribeEvent(AttackEvent.class,
                 (AttackEvent att) -> {
@@ -65,5 +66,6 @@ public class C3POMicroservice extends MicroService {
         subscribeBroadcast(FinishedAttacksBroadcast.class, (finishedAttacks) -> Diary.setC3POFinish(System.currentTimeMillis()));
 
         sendBroadcast(new IsReadyBroadcast());
+
     }
 }

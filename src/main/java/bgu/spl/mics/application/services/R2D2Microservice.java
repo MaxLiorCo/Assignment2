@@ -42,5 +42,6 @@ public class R2D2Microservice extends MicroService {
         });
 
         sendBroadcast(new IsReadyBroadcast());
+
     }
 }

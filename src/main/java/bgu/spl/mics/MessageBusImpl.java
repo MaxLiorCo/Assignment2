@@ -4,6 +4,8 @@ package bgu.spl.mics;
 import bgu.spl.mics.application.passiveObjects.MessageWrap;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingQueue;
 
 
 /**
@@ -13,7 +15,7 @@ import java.util.*;
  */
 public class MessageBusImpl implements MessageBus {
 
-	private Map<MicroService, Queue<Message>> microServiceMap;
+	private Map<MicroService, LinkedBlockingQueue<Message>> microServiceMap;
 	private Map<Class<? extends Message>, MessageWrap> messageTypeMap;
 	private Map<Event<?>, Future<?>> eventToFutureMap;
 
@@ -81,7 +83,7 @@ public class MessageBusImpl implements MessageBus {
 
 	@Override
 	public void register(MicroService m) {
-		microServiceMap.put(m, new LinkedList<>());
+		microServiceMap.put(m, new LinkedBlockingQueue<>());
 	}
 
 	/**
@@ -98,14 +100,15 @@ public class MessageBusImpl implements MessageBus {
 
 	@Override
 	public Message awaitMessage(MicroService m) throws InterruptedException {
-		Queue<Message> tempQueue = microServiceMap.get(m);
- 		while (tempQueue.isEmpty()) {
+		LinkedBlockingQueue<Message> tempQueue = microServiceMap.get(m);
+		Message toReturn = tempQueue.take();
+ 	/*	while (tempQueue.isEmpty()) {
 			try {
 				Thread.sleep(3);
 			}
 			catch (InterruptedException e) { }
-		}
-		return microServiceMap.get(m).remove();
+		}*/
+		return toReturn;
 	}
 
 	/**

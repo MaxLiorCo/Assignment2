@@ -156,7 +156,6 @@ public abstract class MicroService implements Runnable {
      */
     @Override
     public final void run() {
-        System.out.println(name + " thread " + Thread.currentThread());
         Message message;
         bus.register(this);
         initialize(); //we run in the derived object
