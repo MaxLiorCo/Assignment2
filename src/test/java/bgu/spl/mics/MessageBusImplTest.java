@@ -12,20 +12,29 @@ import org.junit.jupiter.api.Test;
 
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class MessageBusImplTest {
 
     MessageBusImpl bus;
+    LinkedList<MicroService> registered;
 
     @BeforeEach
     void setUp() {
         bus = MessageBusImpl.getBusInstance();
+        registered = new LinkedList<>();
     }
 
     @AfterEach
     void tearDown() {
+        clear();
+    }
+
+    private void clear() {
+        for (MicroService ms : registered)
+            bus.unregister(ms);
     }
 
     /**
@@ -66,6 +75,9 @@ class MessageBusImplTest {
         bus.register(ms1);
         bus.register(ms2);
         bus.register(ms3);
+        registered.add(ms1);
+        registered.add(ms2);
+        registered.add(ms3);
         ms1.subscribeBroadcast(b1.getClass(), (c) -> {});
         ms2.subscribeBroadcast(b1.getClass(), (c) -> {});
         ms1.sendBroadcast(b1);
@@ -76,7 +88,6 @@ class MessageBusImplTest {
         catch (InterruptedException e){ }
         assertTrue(b1.equals(b2)); //check if b2 was indeed changed to b1
         assertTrue(b1.equals(b3)); //check if b3 was indeed changed to b1
-
     }
 
     /**
@@ -92,6 +103,8 @@ class MessageBusImplTest {
         HanSoloMicroservice ms2 = new HanSoloMicroservice();
         bus.register(ms1);
         bus.register(ms2);
+        registered.add(ms1);
+        registered.add(ms2);
         ms2.subscribeEvent(e1.getClass(), (c) -> {});
         ms1.sendEvent(e1);
         Message e2 = new DummyAttack();
@@ -120,6 +133,7 @@ class MessageBusImplTest {
         Message message;
         C3POMicroservice ms = new C3POMicroservice();
         bus.register(ms);
+        registered.add(ms);
         Attack a = new Attack(new ArrayList<>(), 10);
         AttackEvent aE = new AttackEvent(a);
         ms.subscribeEvent(AttackEvent.class,

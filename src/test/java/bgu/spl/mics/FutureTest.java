@@ -45,8 +45,7 @@ public class FutureTest {
 
 
     @Test
-    void get() { //checks both get functions
-        future.get();
+    void get() {
         long timeout =1000;
         TimeUnit unit = TimeUnit.MILLISECONDS;
         assertNull(future.get(timeout, unit));
