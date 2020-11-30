@@ -12,7 +12,6 @@ import bgu.spl.mics.application.passiveObjects.Ewok;
 import bgu.spl.mics.application.passiveObjects.Ewoks;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
