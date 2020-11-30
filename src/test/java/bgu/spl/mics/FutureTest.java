@@ -2,8 +2,6 @@ package bgu.spl.mics;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.AfterAll;
 
 import org.junit.jupiter.api.Test;
 
@@ -47,8 +45,7 @@ public class FutureTest {
 
 
     @Test
-    void get() { //checks both get functions
-        future.get();
+    void get() {
         long timeout =1000;
         TimeUnit unit = TimeUnit.MILLISECONDS;
         assertNull(future.get(timeout, unit));
