@@ -20,10 +20,9 @@ import java.util.*;
  */
 public class Main {
     static Object lock = new Object();
-    static boolean finished = false;
+    static final int NUM_OF_MICROSERVISES = 5;
     public static void main(String[] args){
-        finished = false;
-        long time = System.currentTimeMillis();
+
         Reader jfile;
         Gson gson;
         Map<?, ?> map = null;
@@ -32,10 +31,6 @@ public class Main {
             gson = new Gson();
             map = gson.fromJson(jfile, Map.class);
 
-            // print map entries
-            for (Map.Entry<?, ?> entry : map.entrySet()) {
-                System.out.println(entry.getKey() + "=" + entry.getValue());
-            }
             // close reader
             jfile.close();
         }
@@ -43,6 +38,8 @@ public class Main {
             System.out.println("IO Exception");
             e.printStackTrace();
         }
+
+        //---Reading all the necessary data from the "input" file
         ArrayList<Map<String, ?>> attacks_from_json = (ArrayList<Map<String, ?>>) map.get("attacks");
         Attack[] attacks = new Attack[attacks_from_json.size()];
         int i=0;
@@ -66,8 +63,8 @@ public class Main {
         for (i=1; i<=ewoksNum ; i++)
             ewoks.add(i, new Ewok(i));
 
-
-        LeiaMicroservice leia = new LeiaMicroservice(attacks, 5, lock);  //Leia must receive num of total Mic-Services
+        //---Constructing the MicroServices
+        LeiaMicroservice leia = new LeiaMicroservice(attacks, NUM_OF_MICROSERVISES, lock);  //Leia must receive num of total Mic-Services, and the lock that locks the Main thread
         HanSoloMicroservice hanSolo = new HanSoloMicroservice();
         C3POMicroservice c3po = new C3POMicroservice();
         R2D2Microservice r2d2 = new R2D2Microservice(r2d2Time);
@@ -81,19 +78,14 @@ public class Main {
 
         tLeia.start();
 
+        //---After Leia started, the Main thread will wait till Leia is fully initialized and will notify the thread to continue
         synchronized (lock){
             try {
-               // while(!cont)
                      lock.wait();
             }
             catch (InterruptedException e) {}
         }
-      /*  try{
-           //Thread.sleep(2000);
-            Thread.currentThread().wait();
-        }
-        catch (InterruptedException e){}*/
-
+        //---Then all the other MicroServices threas will come to life
         tHanSolo.start();
         tC3po.start();
         tR2d2.start();
@@ -109,6 +101,7 @@ public class Main {
         }
         catch (InterruptedException e){}
 
+        //---After all the thread will join thr main Thread, we will make the "output" file with all the details in the Diary
         Gson output = new Gson();
         Map<String, Object> outputMap = new HashMap<>();
         outputMap.put("Total attacks", Diary.getTotalAttacks());
@@ -127,11 +120,5 @@ public class Main {
             writer.close();
         }
         catch (IOException e) {}
-
-        System.out.println((System.currentTimeMillis() - time)/1000.0);
- /*       long dif = (Diary.getC3POFinish() - Diary.getR2D2Terminate())/1000;
-
-        System.out.println("C3PO finished " + dif + "Seconds");*/
-        finished = true;
     }
 }
