@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Diary {
 
+    //totalAttacks is atomic to prevent multi-threaded increment
     static AtomicInteger totalAttacks = new AtomicInteger(0);
     static long HanSoloFinish;
     static long C3POFinish;

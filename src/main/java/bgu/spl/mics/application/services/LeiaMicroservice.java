@@ -41,6 +41,7 @@ public class LeiaMicroservice extends MicroService {
         subscribeBroadcast(IsReadyBroadcast.class , (IsReadyBroadcast rdy) -> act() );
         numOfReadyMicroServices++; //Leia is ready
         synchronized (lock){
+            //notify Main-Thread to start other threads/micro-services
             lock.notifyAll();
         }
 
@@ -74,7 +75,6 @@ public class LeiaMicroservice extends MicroService {
             //Terminate all other Micro-Services
             sendBroadcast(new TerminateBroadcast());
 
-            //no actual termination yet
             terminate();
             Diary.setLeiaTerminate(System.currentTimeMillis());
         }

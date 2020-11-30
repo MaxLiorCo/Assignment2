@@ -38,6 +38,7 @@ public class LandoMicroservice  extends MicroService {
             Diary.setLandoTerminate(System.currentTimeMillis());
         });
 
+        //Notify other micro services that you are ready to receive messages
         sendBroadcast(new IsReadyBroadcast());
 
     }

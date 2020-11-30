@@ -11,7 +11,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class MessageWrap implements Message {
     private int roundRobinCounter;
     private Class<? extends Message> messageType;
-   // private List<MicroService> subscribedMS; // this list contains the subscribed MS for this type
+    // this list contains the subscribed MS for this type
     private CopyOnWriteArrayList<MicroService> subscribedMS;
 
     public MessageWrap(Class<? extends Message> messageType, int counterInit){
@@ -19,6 +19,14 @@ public class MessageWrap implements Message {
         roundRobinCounter = counterInit;
         subscribedMS = new CopyOnWriteArrayList<>();
     }
+
+    /**
+     *  all following operations are synchronized since we
+     *  do not want multiple services accessing it simultaneously.
+     *  Note, that the traffic in this part of the program is minimal and so
+     *  synchronization barely hinders performance
+     */
+
     public synchronized void addMS(MicroService ms){ subscribedMS.add(ms); }
 
     public synchronized void removeMS(MicroService ms){ //TODO

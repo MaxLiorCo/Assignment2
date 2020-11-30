@@ -17,6 +17,9 @@ public class Ewok {
 
     /**
      * Acquires an Ewok
+     *
+     * is synchronized to prevent acquisition by multiple threads,
+     * an unintended consequence of multi-threaded operation
      */
     public synchronized void acquire() {
         available = false;

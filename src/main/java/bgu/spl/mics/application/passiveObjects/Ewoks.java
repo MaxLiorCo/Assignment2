@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class Ewoks {
 
     /**
-     * ewoks at index zero will be garbage, DO NOT ACCESS IT
+     * @Attention: Ewoks array at index 0 will be garbage, DO NOT ACCESS IT
      */
     private static ArrayList<Ewok> ewoks;
 

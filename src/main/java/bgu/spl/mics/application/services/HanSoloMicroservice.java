@@ -38,16 +38,18 @@ public class HanSoloMicroservice extends MicroService {
                 (AttackEvent att) -> {
                     ArrayList<Ewok> ewoks = Ewoks.getInstance();
                     List<Integer> serials = att.getSerials();
-                    for(Integer i : serials) { //example[1,2]
+                    //acquire Ewoks for Attack
+                    for(Integer i : serials) {
                         ewoks.get(i).acquire();
                     }
+                    //execute attack
                     try {
                         Thread.sleep(att.getDuration());
                     }
                     catch (InterruptedException e) {
                         System.out.println("Someone interrupted Han Solo in his sleep, not supposed to happen");
                     }
-                    //release
+                    //release Ewoks for Attack
                     for(Integer i : serials) { //[2,1]
                         ewoks.get(i).release();
                     }
@@ -66,6 +68,7 @@ public class HanSoloMicroservice extends MicroService {
         //-----subscribe to FinishedAttacksBroadcast
         subscribeBroadcast(FinishedAttacksBroadcast.class, (finishedAttacks) -> Diary.setHanSoloFinish(System.currentTimeMillis()));
 
+        //Notify other micro services that you are ready to receive messages
         sendBroadcast(new IsReadyBroadcast());
 
     }

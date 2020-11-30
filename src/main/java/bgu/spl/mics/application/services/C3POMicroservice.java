@@ -37,7 +37,8 @@ public class C3POMicroservice extends MicroService {
                 (AttackEvent att) -> {
                     ArrayList<Ewok> ewoks = Ewoks.getInstance();
                     List<Integer> serials = att.getSerials();
-                    for(Integer i : serials) { //example[1,2]
+                    //acquire Ewoks for Attack
+                    for(Integer i : serials) {
                         ewoks.get(i).acquire();
                     }
                     try {
@@ -46,8 +47,8 @@ public class C3POMicroservice extends MicroService {
                     catch (InterruptedException e) {
                         System.out.println("Someone interrupted C3PO in his sleep, not supposed to happen");
                     }
-                    //release
-                    for(Integer i : serials) { //[2,1]
+                    //release Ewoks for Attack
+                    for(Integer i : serials) {
                         ewoks.get(i).release();
                     }
                     MessageBusImpl bus = MessageBusImpl.getBusInstance();
@@ -65,6 +66,7 @@ public class C3POMicroservice extends MicroService {
         //-----subscribe to FinishedAttacksBroadcast
         subscribeBroadcast(FinishedAttacksBroadcast.class, (finishedAttacks) -> Diary.setC3POFinish(System.currentTimeMillis()));
 
+        //Notify other micro services that you are ready to receive messages
         sendBroadcast(new IsReadyBroadcast());
 
     }

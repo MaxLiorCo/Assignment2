@@ -35,7 +35,7 @@ public abstract class MicroService implements Runnable {
         messageAct = new HashMap<>();
         this.name = name;
         bus = MessageBusImpl.getBusInstance();
-        terminate = false; // this will be changed to 'true' when TerminateEvent will be sent
+        terminate = false; // this will be changed to 'true' when TerminateEvent will be send
     }
 
     /**
@@ -139,6 +139,7 @@ public abstract class MicroService implements Runnable {
      * message.
      */
     protected final void terminate() {
+        //to stop message loop
         terminate = true;
     }
 
@@ -158,7 +159,9 @@ public abstract class MicroService implements Runnable {
     public final void run() {
         Message message;
         bus.register(this);
-        initialize(); //we run in the derived object
+        //we run in the derived object
+        initialize();
+        //message loop
         while(!terminate){
             try {
                 message = bus.awaitMessage(this);

@@ -41,6 +41,7 @@ public class R2D2Microservice extends MicroService {
             Diary.setR2D2Terminate(System.currentTimeMillis());
         });
 
+        //Notify other micro services that you are ready to receive messages
         sendBroadcast(new IsReadyBroadcast());
 
     }
