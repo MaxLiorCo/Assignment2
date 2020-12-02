@@ -114,7 +114,7 @@ public class Main {
         outputMap.put("R2D2Terminate", Diary.getR2D2Terminate());
         outputMap.put("LandoTerminate", Diary.getLandoTerminate());
         try{
-            FileWriter writer = new FileWriter("src/main/java/bgu/spl/mics/application/output.json");
+            FileWriter writer = new FileWriter(args[1]);
             output.toJson(outputMap, writer);
             writer.flush();
             writer.close();
