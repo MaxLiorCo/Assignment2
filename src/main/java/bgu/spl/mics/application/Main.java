@@ -19,8 +19,10 @@ import java.util.*;
  * In the end, you should output a JSON.
  */
 public class Main {
+
     static Object lock = new Object();
     static final int NUM_OF_MICROSERVISES = 5;
+
     public static void main(String[] args){
 
         Reader jfile;

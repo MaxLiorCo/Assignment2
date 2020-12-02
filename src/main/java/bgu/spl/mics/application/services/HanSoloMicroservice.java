@@ -39,7 +39,7 @@ public class HanSoloMicroservice extends MicroService {
                     List<Integer> serials = att.getSerials();
                     //acquire Ewoks for Attack
                     for(Integer i : serials) {
-                        ewoks.get(i).acquire();
+                        ewoks.get(i).safeAcquire();
                     }
                     //execute attack
                     try {
@@ -50,7 +50,7 @@ public class HanSoloMicroservice extends MicroService {
                     }
                     //release Ewoks for Attack
                     for(Integer i : serials) { //[2,1]
-                        ewoks.get(i).release();
+                        ewoks.get(i).safeRelease();
                     }
                     MessageBusImpl bus = MessageBusImpl.getBusInstance();
                     bus.complete(att, true); // finished attack

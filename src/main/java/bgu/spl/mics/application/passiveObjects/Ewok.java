@@ -18,10 +18,8 @@ public class Ewok {
     /**
      * Acquires an Ewok
      *
-     * is synchronized to prevent acquisition by multiple threads,
-     * an unintended consequence of multi-threaded operation
      */
-    public synchronized void acquire() {
+    public void acquire() {
         available = false;
     }
 
@@ -30,5 +28,18 @@ public class Ewok {
      */
     public void release() {
     	available = true;
+    }
+
+    public synchronized void safeAcquire(){
+        while(!available){
+            try{ wait();}
+            catch (InterruptedException e){}
+        }
+        acquire();
+    }
+
+    public synchronized void safeRelease(){
+        release();
+        notifyAll();
     }
 }
