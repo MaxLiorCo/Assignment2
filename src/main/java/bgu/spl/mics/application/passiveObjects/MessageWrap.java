@@ -36,9 +36,10 @@ public class MessageWrap implements Message {
         return subscribedMS;
     }
 
-    public synchronized MicroService getCurrMicroService(){ //TODO may need to be synchronized
+    public synchronized MicroService getCurrMicroService(){
         int currMSIndex = roundRobinCounter;
-        roundRobinCounter = (roundRobinCounter++) % subscribedMS.size();
+        roundRobinCounter++;
+        roundRobinCounter = roundRobinCounter % subscribedMS.size();
         return subscribedMS.get(currMSIndex);
     }
 

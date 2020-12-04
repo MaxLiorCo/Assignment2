@@ -53,6 +53,12 @@ public class MessageBusImpl implements MessageBus {
 	@Override @SuppressWarnings("unchecked")
 	public <T> void complete(Event<T> e, T result) {
 		Future futureToUpdate = eventToFutureMap.get(e);
+		while (futureToUpdate == null){ //in some cases, the future object may not be in the map, but it will be in the near future, so busy-wait solves this cases
+			try {
+				Thread.currentThread().sleep(2);
+			}catch (InterruptedException ex) {};
+			futureToUpdate = eventToFutureMap.get(e);
+		}
 		futureToUpdate.resolve(result);
 		eventToFutureMap.remove(e);
 	}
@@ -62,10 +68,6 @@ public class MessageBusImpl implements MessageBus {
 		MessageWrap wrap = messageTypeMap.get(b.getClass());
 		if (wrap == null)
 			throw new IllegalArgumentException("Such broadcast do not exist in the current messageTypeMap");
-/*		for (MicroService ms : wrap.getSubscribedMS()){ //Broadcast 'b' is sent to all subscribed MicroServices
-			if (ms!=null)
-				microServiceMap.get(ms).add(b); // adding broadcast b to ms's queue
-		}*/
 		for (Iterator<MicroService> it = wrap.getSubscribedMS().iterator(); it.hasNext();){
 			MicroService tempMS = it.next();
 			microServiceMap.get(tempMS).add(b);
@@ -78,6 +80,8 @@ public class MessageBusImpl implements MessageBus {
 		MessageWrap wrap = messageTypeMap.get(e.getClass());
 		if (wrap == null)
 			throw new IllegalArgumentException("Such event do not exist in the current messageTypeMap");
+		if (wrap.getSubscribedMS().isEmpty())
+			throw new IllegalArgumentException("No subscribed microservices to this event");
 		MicroService toAdd = wrap.getCurrMicroService(); // current MS in the round-robin manner
 		microServiceMap.get(toAdd).add(e); // adding event e to toAdd queue
 		Future<T> future = new Future<T>();

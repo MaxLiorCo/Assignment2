@@ -100,4 +100,8 @@ public class Diary {
     public static long getLandoTerminate() {
         return LandoTerminate;
     }
+
+    public static void resetNumberAttacks() {
+        totalAttacks.set(0);
+    }
 }

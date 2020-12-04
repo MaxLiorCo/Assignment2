@@ -43,6 +43,5 @@ public class R2D2Microservice extends MicroService {
 
         //Notify other micro services that you are ready to receive messages
         sendBroadcast(new IsReadyBroadcast());
-
     }
 }

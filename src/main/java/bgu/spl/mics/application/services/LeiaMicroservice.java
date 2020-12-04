@@ -46,7 +46,6 @@ public class LeiaMicroservice extends MicroService {
     }
 
     private void act(){
-        //TODO make sure all other microsevices registered before leia sends events
         numOfReadyMicroServices++;
         if(numOfReadyMicroServices == totalMicroServices) {
             AttackEvent[] attackEvents = new AttackEvent[attacks.length];
